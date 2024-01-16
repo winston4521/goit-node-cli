@@ -14,21 +14,9 @@ const listContacts = async () => {
 // ===============Get Contacts by id==================
 const getContactById = async (id) => {
   const allContacts = await listContacts();
-  const contact = allContacts.find((con) => con.id === id);
+  const contact = await allContacts.find((con) => con.id === id);
 
   return contact || null;
-};
-
-// ==========Delete contact==============
-const removeContact = async (id) => {
-  const allContacts = await listContacts();
-  const index = allContacts.findIndex((con) => con.id === id);
-  if (index === -1) {
-    return null;
-  }
-  const [deletedBook] = allContacts.splice(index, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
-  return deletedBook;
 };
 
 // ==================Add contact==================
@@ -45,6 +33,18 @@ const addContact = async (data) => {
   await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
 
   return newContact;
+};
+
+// ==========Delete contact==============
+const removeContact = async (id) => {
+  const allContacts = await listContacts();
+  const index = allContacts.findIndex((con) => con.id === id);
+  if (index === -1) {
+    return null;
+  }
+  const [deletedBook] = allContacts.splice(index, 1);
+  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+  return deletedBook || null;
 };
 
 module.exports = {
